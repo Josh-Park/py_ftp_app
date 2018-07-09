@@ -2,6 +2,7 @@ from ftplib import FTP
 import auth_constants
 import datetime
 import email_script
+import os
 
 LOCAL_HOST = "10.10.0.112"
 CURRENT_DATE = datetime.datetime.now()
@@ -11,8 +12,10 @@ def test():
     ftp.retrlines("LIST")
 
     filename = parse_date(CURRENT_DATE.day, CURRENT_DATE.month, CURRENT_DATE.year)
-    output_file = open("%s.txt" % (filename), "wb")
+    filepath = os.path.join("\\\\nas1", "nas1", "Joshua Park", "%s.txt" % filename)
+    output_file = open(filepath, "wb")
     print(filename)
+    print(filepath)
 
     # email_script.send_email_with_attachment(
     #     "datalockertestuser@gmail.com", 
@@ -32,7 +35,7 @@ def test():
     #                 parsed_date = parse_date(day, month, year) + "\n"
     #                 test_file.write(parsed_date)
 
-    # ftp.retrbinary('RETR test.txt', output_file.write)
+    ftp.retrbinary('RETR date_test.txt', output_file.write)
 
     output_file.close()
     ftp.quit()
