@@ -4,6 +4,7 @@ HOST = ""
 AUTH_USER = ""
 AUTH_PASS = ""
 NAS_PATH = os.path.join("")
+TEST_HOST = ""
 TEST_USER = ""
 TEST_PASS = ""
 TEST_EMAIL = ""
