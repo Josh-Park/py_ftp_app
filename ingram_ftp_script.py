@@ -6,7 +6,7 @@ import os
 import ingram_ftp_script_test
 
 CURRENT_DATETIME = datetime.datetime.now()
-FILENAMES = ["pup702", "pup702sa", "pup702su", "pup702wkly"]
+FILENAMES = ["PUP702", "PUP702SA", "PUP702SU", "PUP702WKLY"]
 
 def main():
     # Connect to FTP server and navigate to correct directory
