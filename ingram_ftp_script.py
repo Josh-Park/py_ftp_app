@@ -3,9 +3,10 @@ import auth_constants
 import datetime
 import email_script
 import os
+import ingram_ftp_script_test
 
 CURRENT_DATETIME = datetime.datetime.now()
-FILENAMES = ["PUP702", "PUP702SA", "PUP702SU", "PUP702WKLY"]
+FILENAMES = ["pup702", "pup702sa", "pup702su", "pup702wkly"]
 
 def main():
     # Connect to FTP server and navigate to correct directory
@@ -27,7 +28,7 @@ def main():
         filepath = os.path.join(auth_constants.NAS_PATH, "%s.txt" % (FILENAMES[i] + "_" + parsed_date))
         file_output = open(filepath, "wb")
 
-        ftp.retrbinary = ("RETR %s.txt" % (FILENAMES[i]), file_output.write)
+        ftp.retrbinary("RETR %s.txt" % (FILENAMES[i]), file_output.write)
         print("Copy success")
 
         file_output.close()
@@ -35,7 +36,8 @@ def main():
     print("Disconnecting from FTP server")
     ftp.quit()
 
-    input("Press any key to exit...")
+    input("Press Enter to exit...")
+    quit()
 
 def parse_date(day, month, year):
     dict_day = {"0":"00", "1":"01", "2":"02","3":"03","4":"04","5":"05","6":"06","7":"07","8":"08","9":"09"}
