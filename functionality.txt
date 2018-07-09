@@ -3,3 +3,13 @@ Get file from ftp server
 Rename file to current date (day/month/year) Ex. 11Jul18
 Upload to Drive or save somewhere accessible on the domain
 Email?
+
+Files to download: 
+PUP702.txt
+PUP702SA.txt
+PUP702SU.txt
+PUP702WKLY.txt
+
+Append date to end of filename
+
+Run at around 6AM daily

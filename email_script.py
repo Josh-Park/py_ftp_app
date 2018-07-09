@@ -5,8 +5,6 @@ from email.mime.base import MIMEBase
 from email import encoders
 
 def send_email(from_addr, to_addr, subject, msg_body, login, password, SMTP_server = "smtp.gmail.com", port = 587):
-    # from_addr = "datalockertestuser@gmail.com"
-    # to_addr = "datalockertestuser@gmail.com"
 
     msg = MIMEMultipart()
 

@@ -1,3 +1,7 @@
 ftp_folder
 auth_constants.py
 *.txt
+__pycache__
+build
+dist
+*.spec
