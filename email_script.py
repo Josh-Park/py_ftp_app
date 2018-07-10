@@ -17,8 +17,8 @@ def send_email(from_addr, to_addr, subject, msg_body, login, password, SMTP_serv
 
     print("Connecting to SMTP server")
     server = smtplib.SMTP(SMTP_server, port)
-    server.starttls()
-    server.login(from_addr, password)
+    # server.starttls()
+    # server.login(from_addr, password)
 
     print("Sending email")
     text = msg.as_string()
@@ -49,8 +49,8 @@ def send_email_with_attachment(from_addr, to_addr, subject, msg_body, login, pas
 
     print("Connecting to SMTP server")
     server = smtplib.SMTP(SMTP_server, port)
-    server.starttls()
-    server.login(from_addr, password)
+   # server.starttls()
+    #server.login(from_addr, password)
 
     print("Sending email")
     text = msg.as_string()

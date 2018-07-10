@@ -17,57 +17,53 @@ def main():
     ftp.cwd("fusion")
     ftp.cwd("vendor")
     ftp.cwd("grcd3")
-    ftp.retrlines("LIST")
+
+    # Lists the files on the directory
+    # ftp.retrlines("LIST")
 
     # Parse the current date
-    parsed_date = parse_date(CURRENT_DATETIME.day, CURRENT_DATETIME.month, CURRENT_DATETIME.year)
+    # dayMONTHyear. Ex. 10JUL2018
+    date = CURRENT_DATETIME.strftime("%d%b%Y").upper()
+    # day-MONTH-year hour:minute:sec AM/PM. Ex. 10-JUL-2018 11:34:10 AM
+    date_time = CURRENT_DATETIME.strftime("%d-%b-%Y %H:%M:%S %p").upper()
+    # day/MONTH/year. Ex. 10/JUL/2018
+    date_slashes = CURRENT_DATETIME.strftime("%d/%b/%Y").upper()
+    # NAS_PATH\year\monthnum_MONTH. Ex. \\nas1\nas1\07_JUL
+    store_path = os.path.join(auth_constants.NAS_PATH, str(CURRENT_DATETIME.year), CURRENT_DATETIME.strftime("%m_%b").upper())
 
     # Copy each file in FILENAMES list
     for i in range(4):
         print("Copying %s.txt" % (FILENAMES[i]))
-        filepath = os.path.join(auth_constants.NAS_PATH, str(CURRENT_DATETIME.year), "_".join(parse_month(CURRENT_DATETIME.month)), "%s.txt" % (FILENAMES[i] + "_" + parsed_date))
+        filepath = os.path.join(store_path, "%s.txt" % (FILENAMES[i] + "_" + date))
 
         # Creates a directory if one for the current year or month doesn't exist
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
         with open(filepath, "wb") as file_output:
-            
-        # file_output = open(filepath, "wb")
-
             ftp.retrbinary("RETR %s.txt" % (FILENAMES[i]), file_output.write)
             print("Copy success")
-
-        # file_output.close()
 
     print("Disconnecting from FTP server")
     ftp.quit()
 
+    # Send an email notifying that the files were downloaded
+    email_subject = "%s - Ingram PUP Orders updated" % (date_slashes)
+    email_body = """New Ingram PUP orders downloaded and stored at '%s'.
+    
+    Email sent on %s""" % (store_path ,date_time)
+
+    email_script.send_email(
+        auth_constants.AUTH_EMAIL,
+        auth_constants.RCPT_EMAIL,
+        email_subject,
+        email_body,
+        auth_constants.AUTH_EMAIL_USER,
+        auth_constants.AUTH_EMAIL_PASS,
+        auth_constants.STMP_SERVER,
+        auth_constants.STMP_PORT)
+
     input("Press Enter to exit...")
     quit()
 
-def parse_date(day, month, year):
-    dict_day = {"0":"00", "1":"01", "2":"02","3":"03","4":"04","5":"05","6":"06","7":"07","8":"08","9":"09"}
-
-    parsed_day = str(day)
-    parsed_month = parse_month(month)[1]
-
-    if parsed_day in dict_day:
-        parsed_day = dict_day[parsed_day]
-
-    return parsed_day + parsed_month + str(year)
-
-def parse_month(month):
-    dict_month_num = {"0":"00", "1":"01", "2":"02","3":"03","4":"04","5":"05","6":"06","7":"07","8":"08","9":"09"}
-    dict_month = {"1":"JAN", "2":"FEB", "3":"MAR", "4":"APR", "5":"MAY", "6":"JUN", "7":"JUL", "8":"AUG", "9":"SEP", "10":"OCT", "11":"NOV", "12":"DEC", }
-
-    parsed_month_num = str(month)
-    parsed_month = str(month)
-
-    if parsed_month_num in dict_month_num:
-        parsed_month_num = dict_month_num[parsed_month_num]
-    if parsed_month in dict_month:
-        parsed_month = dict_month[parsed_month]
-
-    return (parsed_month_num, parsed_month)
-
-main()
+if __name__ == "__main__":
+    main()
